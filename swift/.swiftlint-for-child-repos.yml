@@ -4,7 +4,7 @@
 # SwiftLint fetches it over HTTPS on the first run and caches it; keep this
 # file to repo-specific additions only (extra excluded paths, opt-in rules
 # the repo wants, etc.). Anything set here overrides the parent.
-parent_config: https://raw.githubusercontent.com/emotiveapps/swift-style/main/.swiftlint.yml
+parent_config: https://raw.githubusercontent.com/emotiveapps/codestyle/main/swift/.swiftlint.yml
 
 excluded:
   - .build
