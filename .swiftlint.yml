@@ -1,0 +1,52 @@
+# Canonical SwiftLint config for all emotiveapps / Lucky Frog Swift projects.
+# Child repos reference this file remotely via `parent_config:` — see
+# .swiftlint-for-child-repos.yml for the template. Changes here propagate to
+# every repo on its next lint run, so treat edits as policy changes.
+
+excluded:
+  - .build
+  - Derived
+
+disabled_rules:
+  # This is necessary when trying to keep long function signatures below 120 characters per line.
+  - opening_brace
+
+# Owner's policy (Aug 2026): size/complexity rules are warning-only — they
+# nag at the given thresholds but never fail the build. Only short
+# identifiers and line length keep error levels.
+identifier_name:
+  min_length:
+    warning: 2  # single-char loop indices warn, never error
+    error: 1
+line_length:
+  warning: 140
+  error: 200
+nesting:
+  type_level:
+    warning: 2  # nested Decodable response types are idiomatic
+large_tuple:
+  warning: 4
+  error: 10000  # never an error
+function_body_length:
+  warning: 60
+  error: 10000  # never an error
+type_body_length:
+  warning: 350
+  error: 10000  # never an error
+cyclomatic_complexity:
+  warning: 12
+  error: 10000  # never an error
+
+opt_in_rules:
+  - number_separator
+
+number_separator:
+  minimum_length: 6  # Numbers with 6+ digits will require underscores
+
+custom_rules:
+  warnings_need_todo_prefix:
+    included: ".*.swift"
+    name: "Warning"
+    regex: '(#warning\(")(?![ ]*TODO)'
+    message: "Manual compiler warnings must start their message with \"TODO\" as a prefix."
+    severity: error
