@@ -4,15 +4,24 @@
 #
 # Kept deliberately non-conflicting with .swiftlint.yml in this repo, so that
 # `swiftformat .` and `swiftlint --fix` never undo each other's work:
-#   - trailingCommas disabled: SwiftFormat would ADD trailing commas in
-#     multiline literals; SwiftLint's trailing_comma rule removes them.
+#   - trailingCommas enabled, SwiftLint's trailing_comma disabled: commas are
+#     kept, so adding an item to a multiline list touches one line.
+#   - maxwidth 140 matches SwiftLint's line_length warning.
 #   - wrapMultilineStatementBraces disabled: pairs with SwiftLint's disabled
 #     opening_brace rule (we wrap long signatures freely).
 #   - decimalgrouping 3,6 matches SwiftLint number_separator minimum_length 6.
 #   - trimwhitespace agrees with SwiftLint trailing_whitespace.
+#   - wrap-arguments before-first with allow-partial-wrapping false does what
+#     SwiftLint's multiline_arguments checks: once a call's arguments wrap, each
+#     goes on its own line. wrap-parameters stays preserve, because it would
+#     otherwise inherit before-first and rewrap declarations too.
 --swiftversion 6.2
 --allman false
---disable redundantSelf,redundantStaticSelf,wrapMultilineStatementBraces,redundantReturn,trailingCommas,andOperator
+--maxwidth 140
+--disable redundantSelf,redundantStaticSelf,wrapMultilineStatementBraces,redundantReturn,andOperator
 --decimalgrouping 3,6
 --indent 2
 --trimwhitespace always
+--wrap-arguments before-first
+--wrap-parameters preserve
+--allow-partial-wrapping false

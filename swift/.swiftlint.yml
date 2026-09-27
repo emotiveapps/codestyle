@@ -3,13 +3,15 @@
 # .swiftlint-for-child-repos.yml for the template. Changes here propagate to
 # every repo on its next lint run, so treat edits as policy changes.
 
-excluded:
-  - .build
-  - Derived
+# No `excluded:` here. A parent's paths resolve against the parent's own location, so they never
+# reach a child repo; the exclusions live in .swiftlint-for-child-repos.yml instead.
 
 disabled_rules:
   # This is necessary when trying to keep long function signatures below 120 characters per line.
   - opening_brace
+  # Trailing commas are kept: SwiftFormat's trailingCommas adds them to multiline literals and
+  # argument lists, so adding an item touches one line instead of two.
+  - trailing_comma
 
 # Owner's policy (Aug 2026): size/complexity rules are warning-only — they
 # nag at the given thresholds but never fail the build. Only short
@@ -18,6 +20,10 @@ identifier_name:
   min_length:
     warning: 2  # single-char loop indices warn, never error
     error: 1
+  # Raw identifiers (SE-0451, Swift 6.2) are exempt, so a Swift Testing name can be the description:
+  # @Test func `Radius scale is ordered`(). Everything else still starts lowercase, as an error.
+  # A regex in `excluded` is SwiftLint's own mechanism for raw identifiers (realm/SwiftLint#6767).
+  excluded: ["^`.*"]
 line_length:
   warning: 140
   error: 200
@@ -39,6 +45,16 @@ cyclomatic_complexity:
 
 opt_in_rules:
   - number_separator
+  # A call's arguments go all on one line or one per line, never several to a line once wrapped.
+  # SwiftLint cannot fix this rule; SwiftFormat's wrapArguments, set to before-first in .swiftformat,
+  # does the rewriting.
+  - multiline_arguments
+
+# "master" is an established term outside version control (a master key, a master ledger).
+# Branch names still use "main".
+inclusive_language:
+  override_allowed_terms:
+    - master
 
 number_separator:
   minimum_length: 6  # Numbers with 6+ digits will require underscores

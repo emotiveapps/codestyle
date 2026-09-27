@@ -17,13 +17,13 @@ Point a child repo's `parent_config:` at the local path temporarily, run its lin
 
 ```sh
 # in the child repo's .swiftlint.yml (do not commit this)
-parent_config: /Users/andrewash/Development/LF/codestyle/swift/.swiftlint.yml
+parent_config: /path/to/codestyle/swift/.swiftlint.yml
 ```
 
-For SwiftFormat: `swiftformat --lint --config /Users/andrewash/Development/LF/codestyle/swift/.swiftformat <child-repo>`.
+For SwiftFormat: `swiftformat --lint --config /path/to/codestyle/swift/.swiftformat <child-repo>`.
 
 Remember child repos cache the remote parent; after pushing a change, a stale cache can briefly mask it.
 
 ## Conventions
 
-Owner commits directly to `main`, short imperative commit messages, no PR flow.
+Changes go up as pull requests from `enderbot-author` for the owner to review and merge; nothing is pushed to `main` directly. Short imperative commit messages. A merged change reaches every child repo on its next lint run, so the PR says which child repos were linted against it.

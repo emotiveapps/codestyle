@@ -6,6 +6,12 @@
 # the repo wants, etc.). Anything set here overrides the parent.
 parent_config: https://raw.githubusercontent.com/emotiveapps/codestyle/main/swift/.swiftlint.yml
 
+# Exclusions live here, not in the parent: a parent's paths resolve against the parent's location and
+# never reach this repo. Globs, not bare names: a bare `.build` covers only the root's, not every
+# package's below it, and `swiftlint --fix` would then rewrite third-party checkouts.
+# Add paths this repo alone needs skipped below these.
 excluded:
-  - .build
-  - Derived
+  - "**/.build"
+  - "**/.build-linux"
+  - "**/.swiftpm"
+  - "**/Derived"
