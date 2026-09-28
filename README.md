@@ -8,6 +8,7 @@ Shared lint and format configuration for all emotiveapps / Lucky Frog projects, 
 | --- | --- |
 | `swift/.swiftlint.yml` | Canonical SwiftLint config. Child repos consume it **remotely** — do not copy it around. |
 | `swift/.swiftlint-for-child-repos.yml` | Template for child repos: copy into a repo as `.swiftlint.yml`. It points `parent_config:` at the raw GitHub URL of the canonical config and holds only repo-specific overrides. |
+| `swift/vapor-servers.md` | The SwiftLint rules recommended for every Vapor server, and where they go in a monorepo whose server sits beside apps. |
 | `swift/.swiftformat` | Canonical SwiftFormat ([nicklockwood/SwiftFormat](https://github.com/nicklockwood/SwiftFormat)) config. SwiftFormat has **no remote include**, so copy this file into each repo root (or run `swiftformat --config <path-to-this-repo>/swift/.swiftformat`). |
 
 Other languages get their own top-level folder as the need arises.
