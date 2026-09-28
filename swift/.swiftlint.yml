@@ -22,7 +22,8 @@ identifier_name:
     error: 1
   # Raw identifiers (SE-0451, Swift 6.2) are exempt, so a Swift Testing name can be the description:
   # @Test func `Radius scale is ordered`(). Everything else still starts lowercase, as an error.
-  # A regex in `excluded` is SwiftLint's own mechanism for raw identifiers (realm/SwiftLint#6767).
+  # A regex in `excluded` is SwiftLint's own mechanism for raw identifiers (realm/SwiftLint#6767), and it
+  # needs SwiftLint 0.65.0 or later: 0.62 still reports every backticked test name as an error.
   excluded: ["^`.*"]
 line_length:
   warning: 140

@@ -11,16 +11,20 @@ This repo is the single source of truth for lint/format policy across all emotiv
 - SwiftFormat is **nicklockwood/SwiftFormat** (CLI-flag config format), not Apple's swift-format (JSON `.swift-format`). Don't mix up their config syntaxes.
 - New languages get their own top-level folder (`python/`, `typescript/`, …) following the same pattern: canonical config + child-repo template where the tool supports remote includes.
 
-## Testing a change before pushing
+## Testing a change before it merges
 
-Point a child repo's `parent_config:` at the local path temporarily, run its lint, then restore the URL:
+`parent_config:` is always an absolute `https://` URL to the raw file on GitHub, never a local path. SwiftLint reads a URL only if it starts with `http://` or `https://`, and a remote config may not reference a local one, so a chain such as `.swiftlint-vapor.yml` to `.swiftlint.yml` only works through URLs. That is also why this repo must stay public.
+
+To try a change before it reaches `main`, push the branch and point a child repo's `parent_config:` at that branch's raw URL, run its lint, then restore the `main` URL. Never commit the branch URL.
 
 ```sh
-# in the child repo's .swiftlint.yml (do not commit this)
-parent_config: /path/to/codestyle/swift/.swiftlint.yml
+# in the child repo's .swiftlint.yml, temporarily
+parent_config: https://raw.githubusercontent.com/emotiveapps/codestyle/<branch>/swift/.swiftlint.yml
 ```
 
-For SwiftFormat: `swiftformat --lint --config /path/to/codestyle/swift/.swiftformat <child-repo>`.
+A config that names another (`.swiftlint-vapor.yml` names `.swiftlint.yml`) still reads that one from `main`, so a change to both files is tested from a scratch branch on which the upper file's URL names that branch too.
+
+For SwiftFormat, which has no remote include: `swiftformat --lint --config <this checkout>/swift/.swiftformat <child-repo>`.
 
 Remember child repos cache the remote parent; after pushing a change, a stale cache can briefly mask it.
 
