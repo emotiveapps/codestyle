@@ -8,6 +8,8 @@ Shared lint and format configuration for all emotiveapps / Lucky Frog projects, 
 | --- | --- |
 | `swift/.swiftlint.yml` | Canonical SwiftLint config. Child repos consume it **remotely** — do not copy it around. |
 | `swift/.swiftlint-for-child-repos.yml` | Template for child repos: copy into a repo as `.swiftlint.yml`. It points `parent_config:` at the raw GitHub URL of the canonical config and holds only repo-specific overrides. |
+| `swift/.swiftlint-vapor.yml` | SwiftLint for Vapor server packages: its parent is the canonical config, and it adds the rules every Vapor project uses. |
+| `swift/.swiftlint-vapor-for-child-repos.yml` | Template for a Vapor package: copy into the package's folder as `.swiftlint.yml`. |
 | `swift/.swiftformat` | Canonical SwiftFormat ([nicklockwood/SwiftFormat](https://github.com/nicklockwood/SwiftFormat)) config. SwiftFormat has **no remote include**, so copy this file into each repo root (or run `swiftformat --config <path-to-this-repo>/swift/.swiftformat`). |
 
 Other languages get their own top-level folder as the need arises.
@@ -21,6 +23,17 @@ curl -fsSL https://raw.githubusercontent.com/emotiveapps/codestyle/main/swift/.s
 ```
 
 Add repo-specific `excluded:` paths or opt-in rules to the local `.swiftlint.yml`; local keys override the parent. Leave shared thresholds alone — change those here instead.
+
+## Setting up a Vapor package
+
+```sh
+cd ~/Development/<the-repo>/<the-server-package>
+curl -fsSL https://raw.githubusercontent.com/emotiveapps/codestyle/main/swift/.swiftlint-vapor-for-child-repos.yml -o .swiftlint.yml
+```
+
+The chain is the package's `.swiftlint.yml`, then `swift/.swiftlint-vapor.yml`, then `swift/.swiftlint.yml`, so the package gets every canonical rule plus the Vapor ones. Custom rules add up along the chain rather than replacing each other.
+
+Lint a Vapor package **from its own folder**. SwiftLint 0.65 honours a `.swiftlint.yml` in a subfolder when run from a repo root, but ignores that file's `parent_config`, so the Vapor rules would silently not apply. In a repo that also holds apps, add the package folder to the root `.swiftlint.yml`'s `excluded:` and run SwiftLint twice, once at the root and once in the package.
 
 ## How the remote parent works
 

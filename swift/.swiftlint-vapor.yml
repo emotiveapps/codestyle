@@ -1,0 +1,17 @@
+# SwiftLint for Vapor server packages: the canonical config plus the rules every Vapor project uses.
+# A Vapor package consumes it remotely through .swiftlint-vapor-for-child-repos.yml, the same way an app
+# consumes the canonical config. Rules that belong to every Swift repo go in .swiftlint.yml, not here.
+parent_config: https://raw.githubusercontent.com/emotiveapps/codestyle/main/swift/.swiftlint.yml
+
+# Custom rules here are added to the canonical config's, not substituted for them.
+custom_rules:
+  # Server code logs through a subsystem-first area form, `logger.<level>(in: .area, message: "...")`,
+  # as the apps do through Logbook. swift-log's own `logger.info("...")` still compiles beside it, since
+  # Vapor hands out swift-log's Logger as `req.logger` and `context.logger`, so the compiler cannot insist
+  # on the area form and this rule does. It catches a call that ends its line without `message:`; a call
+  # closed mid-line, inside a closure, slips past it.
+  vapor_log_call_form:
+    name: "Vapor log call form"
+    regex: '\blogger\??\s*\.(?:trace|debug|info|notice|warning|error|critical)\((?:(?!message:)[\s\S])*?\)[ \t]*$'
+    message: "Log with the area first: logger.<level>(in: .area, message: \"...\")."
+    severity: error
